@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to v2RayTun</title>
+</head>
+<body>
+    <h1>Redirecting to v2RayTun...</h1>
+    <p>If you are not redirected automatically, <a id="vlessLink" href="#">click here</a>.</p>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const vlessUrl = urlParams.get('vless');
+
+        if (vlessUrl) {
+            const link = document.getElementById('vlessLink');
+            link.href = vlessUrl;
+            link.textContent = 'click here to open v2RayTun';
+            window.location.href = vlessUrl;
+        } else {
+            document.body.innerHTML = '<h1>Error: No VLESS key provided</h1>';
+        }
+    </script>
+</body>
+</html>
