@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Import VLESS Key to v2RayTun</title>
+    <title>Redirecting to v2RayTun</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,9 +16,6 @@
             word-break: break-all;
             margin: 20px 0;
         }
-        .qr-code {
-            margin: 20px 0;
-        }
         .instructions {
             margin-top: 20px;
             text-align: left;
@@ -26,16 +23,15 @@
     </style>
 </head>
 <body>
-    <h1>Import VLESS Key to v2RayTun</h1>
+    <h1>Redirecting to v2RayTun...</h1>
     <p id="vlessKey"></p>
-    <div id="qrCode" class="qr-code"></div>
-    <p><a id="vlessLink" href="#">Click here to open v2RayTun</a></p>
+    <p><a id="vlessLink" href="#">Click here to open v2RayTun manually</a></p>
     <div id="debugInfo"></div>
     <div class="instructions">
         <h2>Instructions:</h2>
         <ol>
-            <li>If the link above doesn't open v2RayTun automatically, copy the VLESS key below and paste it into v2RayTun manually.</li>
-            <li>Alternatively, scan the QR code with v2RayTun to import the key.</li>
+            <li>If you are not redirected automatically, click the link above to open v2RayTun.</li>
+            <li>Alternatively, copy the VLESS key below and paste it into v2RayTun manually.</li>
             <li>If you don't have v2RayTun installed, download it from:
                 <a href="https://play.google.com/store/apps/details?id=com.v2raytun">Google Play (Android)</a> or
                 <a href="https://apps.apple.com/app/v2raytun">App Store (iOS)</a>.
@@ -44,38 +40,43 @@
     </div>
 
     <script>
-        // Получаем VLESS-ключ из параметров URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const vlessUrl = urlParams.get('vless');
-        const debugInfo = document.getElementById('debugInfo');
-        const vlessKeyElement = document.getElementById('vlessKey');
-        const vlessLink = document.getElementById('vlessLink');
-        const qrCodeElement = document.getElementById('qrCode');
+        window.onload = function() {
+            var params = new URLSearchParams(window.location.search);
+            var key = params.get('url');
+            var name = params.get('name');
 
-        if (vlessUrl) {
-            // Отображаем VLESS-ключ как текст
-            vlessKeyElement.innerHTML = '<div class="vless-key">' + vlessUrl + '</div>';
+            var debugInfo = document.getElementById('debugInfo');
+            var vlessKeyElement = document.getElementById('vlessKey');
+            var vlessLink = document.getElementById('vlessLink');
 
-            // Устанавливаем ссылку для ручного перехода
-            vlessLink.href = vlessUrl;
-            vlessLink.textContent = 'Click here to open v2RayTun';
+            if (key && name) {
+                // Заменяем a_n_d на &
+                for (var i = 0; i < 10; i++) {
+                    key = key.replace('a_n_d', '&');
+                }
 
-            // Генерируем QR-код с помощью Google Chart API
-            const qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=' + encodeURIComponent(vlessUrl);
-            qrCodeElement.innerHTML = '<img src="' + qrCodeUrl + '" alt="QR Code for VLESS Key">';
+                // Формируем итоговый URL
+                var redirectUrl = key + '#' + name;
 
-            // Выводим отладочную информацию
-            debugInfo.innerHTML = "VLESS URL: " + vlessUrl;
+                // Отображаем VLESS-ключ как текст
+                vlessKeyElement.innerHTML = '<div class="vless-key">' + redirectUrl + '</div>';
 
-            // Пробуем автоматическое перенаправление (хотя это может не сработать)
-            try {
-                window.location.href = vlessUrl;
-            } catch (error) {
-                debugInfo.innerHTML += "<br>Error during redirect: " + error.message;
+                // Устанавливаем ссылку для ручного перехода
+                vlessLink.href = redirectUrl;
+
+                // Выводим отладочную информацию
+                debugInfo.innerHTML = "Redirect URL: " + redirectUrl;
+
+                // Пробуем автоматическое перенаправление
+                try {
+                    window.location.href = redirectUrl;
+                } catch (error) {
+                    debugInfo.innerHTML += "<br>Error during redirect: " + error.message;
+                }
+            } else {
+                debugInfo.innerHTML = "Error: Missing 'url' or 'name' parameter in the URL.";
             }
-        } else {
-            debugInfo.innerHTML = "Error: No VLESS key provided in the URL.";
-        }
+        };
     </script>
 </body>
 </html>
