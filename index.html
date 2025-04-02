@@ -3,23 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to v2RayTun</title>
+    <title>Import VLESS Key to v2RayTun</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        .vless-key {
+            background-color: #f0f0f0;
+            padding: 10px;
+            word-break: break-all;
+            margin: 20px 0;
+        }
+        .qr-code {
+            margin: 20px 0;
+        }
+        .instructions {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    <h1>Redirecting to v2RayTun...</h1>
-    <p>If you are not redirected automatically, <a id="vlessLink" href="#">click here</a>.</p>
+    <h1>Import VLESS Key to v2RayTun</h1>
+    <p id="vlessKey"></p>
+    <div id="qrCode" class="qr-code"></div>
+    <p><a id="vlessLink" href="#">Click here to open v2RayTun</a></p>
+    <div id="debugInfo"></div>
+    <div class="instructions">
+        <h2>Instructions:</h2>
+        <ol>
+            <li>If the link above doesn't open v2RayTun automatically, copy the VLESS key below and paste it into v2RayTun manually.</li>
+            <li>Alternatively, scan the QR code with v2RayTun to import the key.</li>
+            <li>If you don't have v2RayTun installed, download it from:
+                <a href="https://play.google.com/store/apps/details?id=com.v2raytun">Google Play (Android)</a> or
+                <a href="https://apps.apple.com/app/v2raytun">App Store (iOS)</a>.
+            </li>
+        </ol>
+    </div>
 
     <script>
+        // Получаем VLESS-ключ из параметров URL
         const urlParams = new URLSearchParams(window.location.search);
         const vlessUrl = urlParams.get('vless');
+        const debugInfo = document.getElementById('debugInfo');
+        const vlessKeyElement = document.getElementById('vlessKey');
+        const vlessLink = document.getElementById('vlessLink');
+        const qrCodeElement = document.getElementById('qrCode');
 
         if (vlessUrl) {
-            const link = document.getElementById('vlessLink');
-            link.href = vlessUrl;
-            link.textContent = 'click here to open v2RayTun';
-            window.location.href = vlessUrl;
+            // Отображаем VLESS-ключ как текст
+            vlessKeyElement.innerHTML = '<div class="vless-key">' + vlessUrl + '</div>';
+
+            // Устанавливаем ссылку для ручного перехода
+            vlessLink.href = vlessUrl;
+            vlessLink.textContent = 'Click here to open v2RayTun';
+
+            // Генерируем QR-код с помощью Google Chart API
+            const qrCodeUrl = 'https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=' + encodeURIComponent(vlessUrl);
+            qrCodeElement.innerHTML = '<img src="' + qrCodeUrl + '" alt="QR Code for VLESS Key">';
+
+            // Выводим отладочную информацию
+            debugInfo.innerHTML = "VLESS URL: " + vlessUrl;
+
+            // Пробуем автоматическое перенаправление (хотя это может не сработать)
+            try {
+                window.location.href = vlessUrl;
+            } catch (error) {
+                debugInfo.innerHTML += "<br>Error during redirect: " + error.message;
+            }
         } else {
-            document.body.innerHTML = '<h1>Error: No VLESS key provided</h1>';
+            debugInfo.innerHTML = "Error: No VLESS key provided in the URL.";
         }
     </script>
 </body>
