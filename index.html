@@ -1,82 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting to v2RayTun</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            text-align: center;
-        }
-        .vless-key {
-            background-color: #f0f0f0;
-            padding: 10px;
-            word-break: break-all;
-            margin: 20px 0;
-        }
-        .instructions {
-            margin-top: 20px;
-            text-align: left;
-        }
-    </style>
+  <meta http-equiv="refresh" content="0; url=vless://SvenVPN_243527@212.87.222.10:443?type=tcp&security=reality&fp=firefox&pbk=t6H8TENpnkjaPdVmYFXjQBW4j9hLHyJupGtL4BIepig&sni=vk.com&flow=xtls-rprx-vision&sid=ffffffffff&spx=%2F#SvenVPN_243527-Финляндия">
+  <title>Connecting...</title>
 </head>
 <body>
-    <h1>Redirecting to v2RayTun...</h1>
-    <p id="vlessKey"></p>
-    <p><a id="vlessLink" href="#">Click here to open v2RayTun manually</a></p>
-    <div id="debugInfo"></div>
-    <div class="instructions">
-        <h2>Instructions:</h2>
-        <ol>
-            <li>If you are not redirected automatically, click the link above to open v2RayTun.</li>
-            <li>Alternatively, copy the VLESS key below and paste it into v2RayTun manually.</li>
-            <li>If you don't have v2RayTun installed, download it from:
-                <a href="https://play.google.com/store/apps/details?id=com.v2raytun">Google Play (Android)</a> or
-                <a href="https://apps.apple.com/app/v2raytun">App Store (iOS)</a>.
-            </li>
-        </ol>
-    </div>
-
-    <script>
-        window.onload = function() {
-            var params = new URLSearchParams(window.location.search);
-            var key = params.get('url');
-            var name = params.get('name');
-
-            var debugInfo = document.getElementById('debugInfo');
-            var vlessKeyElement = document.getElementById('vlessKey');
-            var vlessLink = document.getElementById('vlessLink');
-
-            if (key && name) {
-                // Заменяем a_n_d на &
-                for (var i = 0; i < 10; i++) {
-                    key = key.replace('a_n_d', '&');
-                }
-
-                // Формируем итоговый URL
-                var redirectUrl = key + '#' + name;
-
-                // Отображаем VLESS-ключ как текст
-                vlessKeyElement.innerHTML = '<div class="vless-key">' + redirectUrl + '</div>';
-
-                // Устанавливаем ссылку для ручного перехода
-                vlessLink.href = redirectUrl;
-
-                // Выводим отладочную информацию
-                debugInfo.innerHTML = "Redirect URL: " + redirectUrl;
-
-                // Пробуем автоматическое перенаправление
-                try {
-                    window.location.href = redirectUrl;
-                } catch (error) {
-                    debugInfo.innerHTML += "<br>Error during redirect: " + error.message;
-                }
-            } else {
-                debugInfo.innerHTML = "Error: Missing 'url' or 'name' parameter in the URL.";
-            }
-        };
-    </script>
+  <p>Redirecting to V2Ray...</p>
 </body>
 </html>
